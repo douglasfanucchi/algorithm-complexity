@@ -1,6 +1,6 @@
 from manim import *
 
-class ComplexidadeAlgoritmo(Scene):
+class AlgorithmComplexity(Scene):
     def construct(self):
         numbers = [7, 6, 10, 25, 5, 11, 13, 18, 22, 0]
         matrix = IntegerMatrix([numbers])
