@@ -65,6 +65,14 @@ while (i < n)
         equation = MathTex("1")
         equation.set_x(0.5)
 
+        table = Table([
+            ["0", "1", "0", "1"],
+            ["\%", "", "0", "100"]],
+            col_labels=[MathTex("n"), MathTex("f(n)"), MathTex("2n^2"), MathTex("1")],
+            include_outer_lines=True,
+            element_to_mobject=MathTex
+        )
+
         self.play(self.hightlight([0], algorithm), FadeIn(equation))
         self.wait(1)
         self.play(self.hightlight([3, 14], algorithm), Transform(equation, MathTex("1 + 2n").set_x(0.5)))
@@ -78,6 +86,22 @@ while (i < n)
         self.play(FadeOut(lines), Transform(equation, MathTex("f(n) = 1 + 2n + 4 \cdot \\frac{(n)(n-1)}{2}").set_x(0.5)))
         self.wait(1)
         self.play(Transform(equation, MathTex("f(n) = 2n^2 + 1")))
+        self.wait(1)
+        self.play(equation.animate.move_to([-4, 3, 0]))
+        self.wait(1)
+        self.play(table.create())
+        i = 1
+        while i <= 60:
+            self.play([replace_in_table(table, 1, 0, MathTex(i)),
+                        replace_in_table(table, 1, 1, MathTex(f(i))),
+                        replace_in_table(table, 1, 2, MathTex(g(i))),
+                        replace_in_table(table, 1, 3, MathTex(h(i))),
+                        replace_in_table(table, 2, 2, MathTex("{:.2f}".format(g(i)/f(i) * 100))),
+                        replace_in_table(table, 2, 3, MathTex(float("{:.2f}".format(h(i)/f(i) * 100))))
+                    ], run_time=1)
+            self.wait(5 if i == 1 else 2)
+            i += 10 if i != 1 else 9
+
         self.wait(5)
 
     def hightlight(self, indexes, algorithm):
@@ -88,3 +112,17 @@ while (i < n)
             else:
                 animations += [line.animate.set_opacity(0.3)]
         return animations
+
+def replace_in_table(table, row, col, new_element):
+    mobj = table.get_rows()[row][col]
+    new_element.move_to(mobj)
+    return Transform(mobj, new_element)
+
+def f(n):
+    return g(n) + h(n)
+
+def g(n):
+    return 2*n*n
+
+def h(n):
+    return 1
