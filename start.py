@@ -140,11 +140,15 @@ while (i < n)
         self.wait(1)
         while i <= 10:
             result = leftExpression(i)
-            print(result)
             self.play([Transform(N, MathTex("n = " + str(i)).replace(N, dim_to_match=1)),
                        Transform(resolution, MathTex("{:.11f}".format(result) + "\leq c"))
                     ])
             i += 1
+
+        self.play([
+            Transform(N, MathTex("n \\to \infty").replace(N, dim_to_match=1)),
+            Transform(resolution, MathTex("2 < c", font_size=60))
+        ])
 
         self.wait(5)
 
