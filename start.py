@@ -135,12 +135,16 @@ while (i < n)
         self.play(Transform(resolution, MathTex("2 + \\frac{1}{n^2} \leq c")))
         self.wait(1)
         i = 1
-        N = MathTex("N = 1").move_to([-1, 1, 0])
-        while i <= 100:
-            self.play([Transform(N, MathTex("N = " + str(i)).replace(N, dim_to_match=1)),
-                       Transform(resolution, MathTex("{:.2f}".format(leftExpression(i)) + "\leq c"))
+        N = MathTex("n = 1").move_to([0, -1, 0])
+        self.play(Create(N))
+        self.wait(1)
+        while i <= 10:
+            result = leftExpression(i)
+            print(result)
+            self.play([Transform(N, MathTex("n = " + str(i)).replace(N, dim_to_match=1)),
+                       Transform(resolution, MathTex("{:.11f}".format(result) + "\leq c"))
                     ])
-            i = i + (9 if i == 1 else 10)
+            i += 1
 
         self.wait(5)
 
@@ -158,9 +162,21 @@ def replace_in_table(table, row, col, new_element):
     new_element.move_to(mobj)
     return Transform(mobj, new_element)
 
+# class Test(Scene):
+#     def construct(self):
+#         equation = MathTex("2 + \\frac{1}{n^2} \leq c")
+#         self.add(equation)
+#         i = 1
+#         n = MathTex("n = 1").move_to([0, -1, 0])
+#         while i <= 10:
+#             self.play([
+#                 Transform(n, MathTex("n = " + str(i)).replace(n, dim_to_match=1)),
+#                 Transform(equation, MathTex("{:.11f}".format(leftExpression(i)) + "\leq c"))
+#             ])
+#             i+=1
 
 def leftExpression(n):
-    return 2 + 1/n*n
+    return 2 + 1/n**n
 
 def f(n):
     return g(n) + h(n)
