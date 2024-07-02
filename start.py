@@ -99,8 +99,14 @@ while (i < n)
                         replace_in_table(table, 2, 2, MathTex("{:.2f}".format(g(i)/f(i) * 100))),
                         replace_in_table(table, 2, 3, MathTex(float("{:.2f}".format(h(i)/f(i) * 100))))
                     ], run_time=1)
-            self.wait(5 if i == 1 else 2)
+            self.wait(4 if i == 1 else 2)
             i += 10 if i != 1 else 9
+
+        self.play(equation.animate.move_to(ORIGIN), FadeOut(table))
+        self.wait(1)
+        self.play(Transform(equation, MathTex("f(n) = 2n^2")))
+        self.wait(1)
+        self.play(Transform(equation, MathTex("f(n) = n^2")))
 
         self.wait(5)
 
