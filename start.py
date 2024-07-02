@@ -2,7 +2,7 @@ from manim import *
 
 class AlgorithmComplexity(Scene):
     def construct(self):
-        numbers = [7, 6, 10, 25, 5, 11, 13, 18, 22, 0]
+        numbers = [7, 6, 10, 0, 5, 25, 13]
         matrix = IntegerMatrix([numbers])
 
         algorithm = Code(
@@ -146,7 +146,7 @@ while (i < n)
             i += 1
 
         self.play([
-            Transform(N, MathTex("n \\to \infty").replace(N, dim_to_match=1)),
+            Transform(N, MathTex("n \\to +\infty").replace(N, dim_to_match=1)),
             Transform(resolution, MathTex("2 < c", font_size=60))
         ])
 
