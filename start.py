@@ -141,7 +141,7 @@ while (i < n)
         while i <= 10:
             result = leftExpression(i)
             self.play([Transform(N, MathTex("n = " + str(i)).replace(N, dim_to_match=1)),
-                       Transform(resolution, MathTex("{:.11f}".format(result) + "\leq c"))
+                       Transform(resolution, MathTex("{:.3f}".format(result) + "\leq c"))
                     ])
             i += 1
 
@@ -149,6 +149,16 @@ while (i < n)
             Transform(N, MathTex("n \\to +\infty").replace(N, dim_to_match=1)),
             Transform(resolution, MathTex("2 < c", font_size=60))
         ])
+
+        table = Table([["3", "2.25", "2.111...", "2.0625", "\cdots", "2"],
+                       ["1", "2", "3", "4", "\cdots", "+\infty"]],
+                       row_labels=[MathTex("c"), MathTex("N")],
+                       include_outer_lines=True,
+                       element_to_mobject=MathTex
+                    ).scale(0.9)
+        self.play(FadeOut(bigODefinition), FadeOut(equation), FadeOut(bigORelation),
+                  FadeOut(resolution), FadeOut(N))
+        self.play(Create(table))
 
         self.wait(5)
 
@@ -180,7 +190,7 @@ def replace_in_table(table, row, col, new_element):
 #             i+=1
 
 def leftExpression(n):
-    return 2 + 1/n**n
+    return 2 + 1/n**2
 
 def f(n):
     return g(n) + h(n)
