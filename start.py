@@ -73,6 +73,8 @@ while (i < n)
             element_to_mobject=MathTex
         )
 
+        bigODefinition = MathTex("\exists c, N > 0 \mid \\forall n \geq N, f(n) \leq c \cdot g(n) \Rightarrow f(n) = \mathcal{O}(g(n))")
+
         self.play(self.hightlight([0], algorithm), FadeIn(equation))
         self.wait(1)
         self.play(self.hightlight([3, 14], algorithm), Transform(equation, MathTex("1 + 2n").set_x(0.5)))
@@ -107,6 +109,38 @@ while (i < n)
         self.play(Transform(equation, MathTex("f(n) = 2n^2")))
         self.wait(1)
         self.play(Transform(equation, MathTex("f(n) = n^2")))
+        self.wait(1)
+        self.remove(equation)
+        self.play(Create(bigODefinition), run_time=1.5)
+        self.wait(1)
+
+        equation = MathTex("f(n) = 2n^2 + 1")
+        equation.move_to([-5, 2, 0])
+        bigORelation = MathTex("f(n) = \mathcal{O}(g(n))")
+        bigORelation.move_to([-5, 1, 0])
+        resolution = MathTex("f(n) \leq c \cdot g(n)")
+
+        self.play(bigODefinition.animate.move_to([-1, 3, 0]))
+        self.play(Create(equation))
+        self.wait(1)
+        self.play(Create(bigORelation))
+        self.play(Transform(bigORelation, MathTex("f(n) = \mathcal{O}(n^2)").move_to([-5.2, 1, 0])))
+        self.wait(1)
+        self.play(Create(resolution))
+        self.wait(1)
+        self.play(Transform(resolution, MathTex("2n^2 + 1 \leq c \cdot n^2")))
+        self.wait(1)
+        self.play(Transform(resolution, MathTex("\\frac{2n^2 + 1}{n^2} \leq c")))
+        self.wait(1)
+        self.play(Transform(resolution, MathTex("2 + \\frac{1}{n^2} \leq c")))
+        self.wait(1)
+        i = 1
+        N = MathTex("N = 1").move_to([-1, 1, 0])
+        while i <= 100:
+            self.play([Transform(N, MathTex("N = " + str(i)).replace(N, dim_to_match=1)),
+                       Transform(resolution, MathTex("{:.2f}".format(leftExpression(i)) + "\leq c"))
+                    ])
+            i = i + (9 if i == 1 else 10)
 
         self.wait(5)
 
@@ -123,6 +157,10 @@ def replace_in_table(table, row, col, new_element):
     mobj = table.get_rows()[row][col]
     new_element.move_to(mobj)
     return Transform(mobj, new_element)
+
+
+def leftExpression(n):
+    return 2 + 1/n*n
 
 def f(n):
     return g(n) + h(n)
