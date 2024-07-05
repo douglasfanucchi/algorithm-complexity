@@ -36,6 +36,7 @@ while (i < n)
         self.add(arrowI, arrowJ)
         self.add(arrowI)
         self.play(FadeIn(matrix))
+        self.wait(30)
 
         for i in range(len(numbers)):
             self.play(arrowI.animate.set_x(matrix[0][i].get_x()), run_time=0.3)
@@ -48,6 +49,7 @@ while (i < n)
                     tmp = matrix[0][i]
                     matrix[0][i] = matrix[0][j]
                     matrix[0][j] = tmp
+        self.wait(1)
 
         self.remove(matrix, arrowI, arrowJ)
 
@@ -61,7 +63,7 @@ while (i < n)
                     FadeIn(letter , run_time=0.005),
                     run_time=0.008,
                 )
-
+        self.wait(10)
         equation = MathTex("1")
         equation.set_x(0.5)
 
@@ -77,21 +79,31 @@ while (i < n)
 
         self.play(self.hightlight([0], algorithm), FadeIn(equation))
         self.wait(1)
-        self.play(self.hightlight([3, 14], algorithm), Transform(equation, MathTex("1 + 2n").set_x(0.5)))
+        self.play(self.hightlight([3, 14], algorithm))
+        self.wait(25)
+        self.play(Transform(equation, MathTex("1 + 2n").set_x(0.5)))
         self.wait(1)
         self.play(self.hightlight([8, 9, 10], algorithm))
-        self.wait(1)
+        self.wait(10)
         self.play(self.hightlight([8, 9, 10, 12], algorithm))
+        self.wait(65)
+        self.play(Transform(equation, MathTex("1 + 2n + 4 \cdot \sum_{j=1}^{n-1}j").set_x(0.5)))
         self.wait(1)
-        self.play(Transform(equation, MathTex("1 + 2n + 4 \cdot \sum_{k=1}^{n-1}k").set_x(0.5)))
+        self.play(FadeOut(lines), Transform(equation, MathTex("f(n) = 1 + 2n + 4 \cdot \\frac{n(n-1)}{2}").set_x(0.5)))
         self.wait(1)
-        self.play(FadeOut(lines), Transform(equation, MathTex("f(n) = 1 + 2n + 4 \cdot \\frac{(n)(n-1)}{2}").set_x(0.5)))
+        self.play(Transform(equation, MathTex("f(n) = 1 + 2n + 2 \cdot n(n-1)")))
+        self.wait(1)
+        self.play(Transform(equation, MathTex("f(n) = 1 + 2n + 2 (n^2 - n)")))
+        self.wait(1)
+        self.play(Transform(equation, MathTex("f(n) = 1 + 2n + 2n^2 - 2n")))
+        self.wait(1)
+        self.play(Transform(equation, MathTex("f(n) = 1 + 2n^2")))
         self.wait(1)
         self.play(Transform(equation, MathTex("f(n) = 2n^2 + 1")))
-        self.wait(1)
+        self.wait(3)
         self.play(equation.animate.move_to([-4, 3, 0]))
-        self.wait(1)
         self.play(table.create())
+        self.wait(23)
         i = 1
         while i <= 60:
             self.play([replace_in_table(table, 1, 0, MathTex(i)),
@@ -105,14 +117,14 @@ while (i < n)
             i += 10 if i != 1 else 9
 
         self.play(equation.animate.move_to(ORIGIN), FadeOut(table))
-        self.wait(1)
+        self.wait(29)
         self.play(Transform(equation, MathTex("f(n) = 2n^2")))
-        self.wait(1)
+        self.wait(4)
         self.play(Transform(equation, MathTex("f(n) = n^2")))
-        self.wait(1)
+        self.wait(13)
         self.remove(equation)
         self.play(Create(bigODefinition), run_time=1.5)
-        self.wait(1)
+        self.wait(15)
 
         equation = MathTex("f(n) = 2n^2 + 1")
         equation.move_to([-5, 2, 0])
@@ -122,18 +134,19 @@ while (i < n)
 
         self.play(bigODefinition.animate.move_to([-1, 3, 0]))
         self.play(Create(equation))
-        self.wait(1)
+        self.wait(5)
         self.play(Create(bigORelation))
+        self.wait(3)
         self.play(Transform(bigORelation, MathTex("f(n) = \mathcal{O}(n^2)").move_to([-5.2, 1, 0])))
         self.wait(1)
         self.play(Create(resolution))
-        self.wait(1)
+        self.wait(10)
         self.play(Transform(resolution, MathTex("2n^2 + 1 \leq c \cdot n^2")))
-        self.wait(1)
+        self.wait(2)
         self.play(Transform(resolution, MathTex("\\frac{2n^2 + 1}{n^2} \leq c")))
-        self.wait(1)
+        self.wait(2)
         self.play(Transform(resolution, MathTex("2 + \\frac{1}{n^2} \leq c")))
-        self.wait(1)
+        self.wait(6)
         i = 1
         N = MathTex("n = 1").move_to([0, -1, 0])
         self.play(Create(N))
@@ -143,24 +156,50 @@ while (i < n)
             self.play([Transform(N, MathTex("n = " + str(i)).replace(N, dim_to_match=1)),
                        Transform(resolution, MathTex("{:.3f}".format(result) + "\leq c"))
                     ])
+            if i == 0:
+                self.wait(2)
+            if i == 1:
+                self.wait(1)
             i += 1
+        self.wait(8)
 
         self.play([
             Transform(N, MathTex("n \\to +\infty").replace(N, dim_to_match=1)),
             Transform(resolution, MathTex("2 < c", font_size=60))
         ])
+        self.wait(4)
 
-        table = Table([["3", "2.25", "2.111...", "2.0625", "\cdots", "2"],
-                       ["1", "2", "3", "4", "\cdots", "+\infty"]],
-                       row_labels=[MathTex("c"), MathTex("N")],
+        self.play(FadeOut(N), FadeOut(equation),
+                  Transform(resolution, MathTex("2 + \\frac{1}{n^2} \leq c")),
+                  FadeOut(bigORelation))
+        self.wait(1)
+
+        N = MathTex("n = 1").replace(N, dim_to_match=1)
+
+        self.play(FadeIn(N), Transform(resolution, MathTex("2 + \\frac{1}{1^2} \leq c")))
+        self.play(Transform(resolution, MathTex("2 + \\frac{1}{1} \leq c")))
+        self.play(Transform(resolution, MathTex("2 + 1 \leq c")))
+        self.play(Transform(resolution, MathTex("3 \leq c")))
+        self.wait(2)
+
+        bigORelation = MathTex("\\forall n \geq 1,\; 2n^2 + 1 \leq 3n^2 \Rightarrow f(n) = \mathcal{O}(n^2)")
+
+        self.play(Transform(N, MathTex("N = 1").move_to([-6.175, 2, 0])),
+                  Transform(resolution, MathTex("c = 3").move_to([-6.225, 1, 0])))
+        self.wait(5)
+        self.play(Create(bigORelation))
+        self.wait(15)
+
+        table = Table([["=1", "=2", "=3", "=4", "\cdots", "+\infty"],
+                       ["\geq3", "\geq2.25", "\geq2.111...", "\geq2.0625", "\cdots", ">2"]],
+                       row_labels=[MathTex("N"), MathTex("c")],
                        include_outer_lines=True,
                        element_to_mobject=MathTex
-                    ).scale(0.9)
-        self.play(FadeOut(bigODefinition), FadeOut(equation), FadeOut(bigORelation),
-                  FadeOut(resolution), FadeOut(N))
+                    ).scale(0.8)
+        self.play(FadeOut(bigODefinition), FadeOut(resolution), FadeOut(bigORelation), FadeOut(N))
         self.play(Create(table))
 
-        self.wait(5)
+        self.wait(20)
 
     def hightlight(self, indexes, algorithm):
         animations = []
